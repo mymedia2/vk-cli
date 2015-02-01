@@ -17,10 +17,9 @@ if hasattr(settings, 'access_token'):
 else:
 	login = input(_("Логин:  "))
 	passw = input(_("Пароль: "))
-	vkapi = vk.API(APP_ID, login, passw, scope='messages')
-	del passw
-	# I discovery that vk library save the password
-	del vkapi.user_password
+	try: vkapi = vk.API(APP_ID, login, passw, scope='messages')
+	# I discovered that vk library stores the password
+	finally: del passw, vkapi.user_password
 	settings.access_token = vkapi.access_token
 
 user = vkapi.users.get(fields='online')[0]
@@ -38,3 +37,12 @@ for i, diag in enumerate(dialogs, start=1):
 
 	print("{0:>3}".format(i), "{0:>3}".format(unread), "{0:<85}".format(title))
 	print(" "*13, "{0:<80}".format(diag['message']['body']))
+
+diag_num = int(input(_("№ диалога: "))) - 1
+diag = dialogs[diag_num]
+if 'chat_id' in diag['message']: us_id, ch_id = 0, diag['message']['chat_id']
+else: ch_id, us_id = 0, diag['message']['user_id']
+messages = vkapi.messages.getHistory(chat_id=ch_id, user_id=us_id)['items']
+for msg in messages[::-1]:
+	align = '>' if msg['out'] else '<'
+	print(" "*13, "{0:{1}80}".format(msg['body'], align))

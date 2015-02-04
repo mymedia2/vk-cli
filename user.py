@@ -6,7 +6,7 @@ class User(object):
 	def __hash__(self):
 		return self.id
 class UserPack(set):
-	def fill_all(self, fields):
+	def fill_all(self, fields=""):
 		vkapi = vkontakte.api()
 		ids = ",".join((str(u.id) for u in self))
 		response = vkapi.users.get(user_ids=ids, fields=fields)

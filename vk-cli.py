@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import vkontakte
-import sys
+import vkontakte, sys
 from settings import Settings
+from user import User, UserPack
 
 def _(s): return s
 
@@ -22,9 +22,9 @@ else:
 	finally: del passw, vkapi.user_password
 	settings.access_token = vkapi.access_token
 
-user = vkapi.users.get(fields='online')[0]
-print(_("Здравствуйте, {fname} {lname}!").format(fname=user.first_name, lname=user.last_name), end=' ')
-print("O" if user.online else "Ø")
+current_user = User(0)
+current_user.__dict__ = vkapi.users.get(fields='online')[0].__dict__
+print(_("Здравствуйте, {header}").format(header=current_user.header()))
 
 dialogs = vkapi.messages.getDialogs(count=10, preview_length=80).items
 for i, diag in enumerate(dialogs, start=1):

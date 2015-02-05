@@ -5,6 +5,18 @@ class User(object):
 		self.id = id
 	def __hash__(self):
 		return self.id
+	def header(self):
+		l = [self.first_name, self.last_name]
+		if hasattr(self, 'deactivated'):
+			if self.deactivated == "deleted": l.append("X")
+			elif self.deactivated == "banned": l.append("x")
+		elif hasattr(self, 'online'):
+			if self.online:
+				if hasattr(self, 'online_mobile') and self.online_mobile:
+					l.append("o")
+				else: l.append("O")
+			else: l.append("Ø")
+		return " ".join(l)
 class UserPack(set):
 	def fill_all(self, fields=""):
 		vkapi = vkontakte.api()

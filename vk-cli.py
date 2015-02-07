@@ -26,14 +26,17 @@ current_user = User(0)
 current_user.__dict__ = vkapi.users.get(fields='online')[0].__dict__
 print(_("Здравствуйте, {header}").format(header=current_user.header()))
 
+users = UserPack([current_user])
 dialogs = vkapi.messages.getDialogs(count=10, preview_length=80).items
+for diag in dialogs:
+	if 'chat_id' not in diag.message: users.add(diag.message.user_id)
+users.fill_all("online")
+
 for i, diag in enumerate(dialogs, start=1):
 	unread = diag.unread if 'unread' in diag else 0
 	if unread >= 1000: unread = "..."
 	if 'chat_id' in diag.message: title = diag.message.title
-	else:
-		sender = vkapi.users.get(user_ids=diag.message.user_id)[0]
-		title = _("{fname} {lname}").format(fname=sender.first_name, lname=sender.last_name)
+	else: title = users[diag.message.user_id].header()
 
 	print("{0:>3}".format(i), "{0:>3}".format(unread), "{0:<85}".format(title))
 	print(" "*13, "{0:<80}".format(diag.message.body))

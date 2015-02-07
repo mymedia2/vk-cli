@@ -17,7 +17,20 @@ class User(object):
 				else: l.append("O")
 			else: l.append("Ø")
 		return " ".join(l)
-class UserPack(set):
+
+class UserPack(dict):
+	def __init__(self, arg=None):
+		super().__init__()
+		if arg is not None: self.add(arg)
+	def __iter__(self):
+		return iter(self.values())
+	def add(self, arg):
+		if hasattr(arg, '__iter__'):
+			for elem in arg: self.add(elem)
+		else:
+			if type(arg) is User: self[arg.id] = arg
+			else: self[arg] = User(arg)
+
 	def fill_all(self, fields=""):
 		vkapi = vkontakte.api()
 		ids = ",".join((str(u.id) for u in self))

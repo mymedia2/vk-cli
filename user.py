@@ -5,6 +5,10 @@ class User(object):
 		self.id = id
 	def __hash__(self):
 		return self.id
+	def __eq__(self, other):
+		return self.id == other.id
+	def __ne__(self, other):
+		return not(self == other)
 	def header(self):
 		l = [self.first_name, self.last_name]
 		if hasattr(self, 'deactivated'):

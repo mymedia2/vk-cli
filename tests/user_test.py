@@ -54,7 +54,7 @@ class UserPackTestNetwork(unittest.TestCase):
 		both = list(both)
 		both = {both[0].id: both[0], both[1].id: both[1]}
 		self.assertEqual(both[1].city.id, 2)
-		self.assertEqual(both[2].city.id, 1)
+		self.assertEqual(both[MY_ID].city.id, 1)
 		self.assertTrue(both[1].country.title == both[MY_ID].country.title == "Россия")
 	def tearDownClass():
 		cl = vkontakte.api().__class__

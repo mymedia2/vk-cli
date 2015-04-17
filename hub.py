@@ -1,19 +1,31 @@
+#!/usr/bin/python3
 import sys
 import vkontakte
 from console import Console
 from settings import Settings
+from singleton import singleton
 from user import User, UserPack
 
+@singleton
 class Hub(object):
-	"""	Концентратор всех объектов, которые я являются общими для программы"""
+	"""Концентратор всех объектов, которые являются общими для программы"""
+
+	#: API ВКонтакте, осуществляет работу с сетью, экземпляр vkontakte.api
+	vkapi = None
+
+	#: Настройки всей программы, осущесвляет запись в файл, экземпляр Settings
+	settings = None
+
+	#: Объект User текущего пользователя
+	current_user = None
+
+	#: UserPack со всеми закешированными пользователями
+	users = None
+
+	#: экземпляр Console для ввода-вывода
+	console = None
 
 	def __init__(self):
-		"""	Инициализирует:
-			self.settings
-			self.vkapi
-			self.current_user
-			self.users
-		"""
 		file_name, dot, extension = sys.argv[0].rpartition('.')
 		if extension == 'py' and file_name != '':
 			self.settings = Settings(file_name + '.conf')
@@ -24,8 +36,8 @@ class Hub(object):
 			self.vkapi = vkontakte.api(APP_ID, access_token=self.settings.access_token)
 		else:
 			# TODO: реализовать запрос через Interact
-			login = input(_("Логин:  "))
-			passw = input(_("Пароль: "))
+			login = input("Логин: ")
+			passw = input("Пароль: ")
 			try: self.vkapi = vkontakte.api(APP_ID, login, passw, scope='messages')
 			# я обнаружил, что библиотека храинт пароль
 			finally: del passw, self.vkapi.user_password

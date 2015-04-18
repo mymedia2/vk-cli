@@ -5,10 +5,10 @@ class FeatureInterface(object):
 	"""Является интерфейсом для каждой из возможности программы"""
 
 	#: Ссылка на общий Hub, может изпользоваться возможностями для доступа к API
-	share = None
+	common = None
 
 	def __init__(self):
-		self.share = Hub()
+		self.common = Hub()
 	
 	def get_data(self, *args, **kwargs):
 		"""Возвращает словарь с данными, которые можно отрисовывать на консоли.
@@ -20,7 +20,7 @@ class FeatureInterface(object):
 		raise NotImplementedError
 	
 	def render(self, data):
-		"""Отрисовывает словарь data в self.share.console"""
+		"""Отрисовывает словарь data в self.common.console"""
 		raise NotImplementedError
 	
 	def call(self, *args, **kwargs):

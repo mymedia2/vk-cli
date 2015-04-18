@@ -3,13 +3,17 @@ from feature_interface import FeatureInterface
 class Dialogs(FeatureInterface):
 	"""Отвечает за работу экрана со списком диалогов пользователя"""
 
+	#: Сохраняет последний список диалогов, чтобы потом можно было определить,
+	#: какой диалог надо показывать, если известен его номер
+	last_list = None
+
 	def get_data(self):
-		dialogs = self.share.vkapi.messages.getDialogs(count=10, preview_length=80).items
-		for diag in dialogs:
+		self.dialogs = self.share.vkapi.messages.getDialogs(count=10, preview_length=80).items
+		for diag in self.dialogs:
 			if 'chat_id' not in diag.message:
 				self.share.users.add(diag.message.user_id)
 		self.share.users.fill_all("online")
-		return dialogs
+		return self.dialogs
 
 	def render(self, dialogs):
 		#TODO: запихнать dialogs в именнованный кортеж

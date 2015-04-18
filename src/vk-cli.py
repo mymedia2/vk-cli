@@ -10,7 +10,7 @@ def app():
 	if len(sys.argv) == 1:
 		Dialogs().call()
 	elif sys.argv[1] == "show":
-		Messages().call()
+		Messages().call(user_id=sys.argv[2])
 	elif sys.argv[1] == "send":
 		Sender().call()
 

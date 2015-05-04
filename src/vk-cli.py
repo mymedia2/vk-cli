@@ -16,6 +16,9 @@ def get_args():
 	show_parser.add_argument("--chat", type=int)
 
 	send_parser = subparsers.add_parser("send")
+	send_parser.add_argument("--id", type=int)
+	send_parser.add_argument("--chat", type=int)
+	send_parser.add_argument("text", type=str)
 
 	return parser.parse_args()
 
@@ -31,6 +34,10 @@ def app():
 			Messages().call(chat_id=args.chat)
 		else: raise ValueError
 	elif args.action == "send":
-		Sender().call()
+		if args.id and not args.chat:
+			Sender().call(args.text, user_id=args.id)
+		elif not args.id and args.chat:
+			Sender().call(args.text, chat_id=args.chat)
+		else: raise ValueError
 
 if __name__ == "__main__": app()

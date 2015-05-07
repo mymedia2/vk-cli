@@ -14,6 +14,7 @@ def get_args():
 	show_parser = subparsers.add_parser("show")
 	show_parser.add_argument("--id", type=int)
 	show_parser.add_argument("--chat", type=int)
+	show_parser.add_argument("--page", type=int, default=0)
 
 	send_parser = subparsers.add_parser("send")
 	send_parser.add_argument("--id", type=int)
@@ -29,9 +30,9 @@ def app():
 		Dialogs().call()
 	elif args.action == "show":
 		if args.id and not args.chat:
-			Messages().call(user_id=args.id)
+			Messages().call(user_id=args.id, page=args.page)
 		elif not args.id and args.chat:
-			Messages().call(chat_id=args.chat)
+			Messages().call(chat_id=args.chat, page=args.page)
 		else: raise ValueError
 	elif args.action == "send":
 		if args.id and not args.chat:

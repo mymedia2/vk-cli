@@ -3,11 +3,12 @@ from feature_interface import FeatureInterface
 class Messages(FeatureInterface):
 	"""Отвечает за работу экрана с сообщениями из конкретного диалога"""
 
-	def get_data(self, chat_id=0, user_id=0):
-		messages = self.common.vkapi.messages.getHistory(chat_id=chat_id, user_id=user_id).items
+	def get_data(self, chat_id=0, user_id=0, page=0):
+		params = { "chat_id": chat_id, "user_id": user_id, "offset": page * 20 }
+		messages = self.common.vkapi.messages.getHistory(**params).items
 
-		# если в диалоге есть сообщения и этот диалог является беседой
 		if len(messages) and 'chat_id' in messages[0]:
+			# если в диалоге есть сообщения и этот диалог является беседой
 			for msg in messages:
 				self.common.users.add(msg.from_id)
 			self.common.users.fill_all("online")

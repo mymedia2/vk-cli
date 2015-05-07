@@ -4,11 +4,13 @@ class Dialogs(FeatureInterface):
 	"""Отвечает за работу экрана со списком диалогов пользователя"""
 
 	#: Сохраняет последний список диалогов, чтобы потом можно было определить,
-	#: какой диалог надо показывать, если известен его номер
+	#: какой диалог надо показывать, если известен его номер.
+	#: Пока не реалиозвано
 	last_list = None
 
-	def get_data(self):
-		self.dialogs = self.common.vkapi.messages.getDialogs(count=10, preview_length=80).items
+	def get_data(self, page=0):
+		params = { "count": 10, "preview_length": 80, "offset": page * 10 }
+		self.dialogs = self.common.vkapi.messages.getDialogs(**params).items
 		for diag in self.dialogs:
 			if 'chat_id' not in diag.message:
 				self.common.users.add(diag.message.user_id)

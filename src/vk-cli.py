@@ -10,6 +10,7 @@ def get_args():
 	subparsers = parser.add_subparsers(dest="action")
 
 	dialogs_parser = subparsers.add_parser("dialogs")
+	dialogs_parser.add_argument("--page", type=int, default=0)
 
 	show_parser = subparsers.add_parser("show")
 	show_parser.add_argument("--id", type=int)
@@ -27,7 +28,7 @@ def app():
 	Hub()	# инициализируем одиночку
 	args = get_args()
 	if args.action == None or args.action == "dialogs":
-		Dialogs().call()
+		Dialogs().call(page=args.page)
 	elif args.action == "show":
 		if args.id and not args.chat:
 			Messages().call(user_id=args.id, page=args.page)

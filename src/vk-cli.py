@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+from locales import _
 from dialogs import Dialogs
 from hub import Hub
 from messages import Messages
@@ -7,31 +8,31 @@ from sender import Sender
 
 def get_args():
 	# TODO: запихнуть этого монстра в отдельный файл и в класс-обёртку
-	parser = argparse.ArgumentParser(description="Мессенджер ВКонтаке с CLI для гиков", add_help=False)
+	parser = argparse.ArgumentParser(description=_("help", "program_description"), add_help=False)
 
-	parent_group = parser.add_argument_group(title="Параметры")
-	parent_group.add_argument("-h", "--help", action="help", help="Показать эту справку и выйти")
+	parent_group = parser.add_argument_group(title=_("help", "parametrs_title"))
+	parent_group.add_argument("-h", "--help", action="help", help=_("help", "help_key_all_desciption"))
 
-	subparsers = parser.add_subparsers(dest="action", title="Действия")
+	subparsers = parser.add_subparsers(dest="action", title=_("help", "action_title"))
 
-	dialogs_parser = subparsers.add_parser("dialogs", help="Показть список диалогов текущего пользователя", add_help=False)
-	dialogs_group = dialogs_parser.add_argument_group(title="Параметры")
-	dialogs_group.add_argument("-p", "--page", type=int, default=0, help="Страница для отображения", metavar="INT")
-	dialogs_group.add_argument("-h", "--help", action="help", help="Показать справку об этой команде и выйти")
+	dialogs_parser = subparsers.add_parser("dialogs", help=_("help", "dialogs_title"), add_help=False)
+	dialogs_group = dialogs_parser.add_argument_group(title=_("help", "parametrs_title"))
+	dialogs_group.add_argument("-p", "--page", type=int, default=0, help=_("help", "page_key_description"), metavar="INT")
+	dialogs_group.add_argument("-h", "--help", action="help", help=_("help", "help_key_command_description"))
 
-	show_parser = subparsers.add_parser("show", help="Показать сообщения из определённого диалога", add_help=False)
-	show_group = show_parser.add_argument_group(title="Параметры")
-	show_group.add_argument("-p", "--page", type=int, default=0, help="Страница для отображения", metavar="INT")
+	show_parser = subparsers.add_parser("show", help=_("help", "show_title"), add_help=False)
+	show_group = show_parser.add_argument_group(title=_("help", "parametrs_title"))
+	show_group.add_argument("-p", "--page", type=int, default=0, help=_("help", "page_key_description"), metavar="INT")
 	show_group.add_argument("--id", type=int, metavar="USER_ID")
 	show_group.add_argument("--chat", type=int, metavar="CHAT_ID")
-	show_group.add_argument("-h", "--help", action="help", help="Показать справку об этой команде и выйти")
+	show_group.add_argument("-h", "--help", action="help", help=_("help", "help_key_command_description"))
 
-	send_parser = subparsers.add_parser("send", help="Отправить сообщение", add_help=False)
-	send_group = send_parser.add_argument_group(title="Параметры")
-	send_group.add_argument("text", type=str, help="Текст сообщения")
+	send_parser = subparsers.add_parser("send", help=_("help", "send_title"), add_help=False)
+	send_group = send_parser.add_argument_group(title=_("help", "parametrs_title"))
+	send_group.add_argument("text", type=str, help=_("help", "text_key_desciption"))
 	send_group.add_argument("--id", type=int, metavar="USER_ID")
 	send_group.add_argument("--chat", type=int, metavar="CHAT_ID")
-	send_group.add_argument("-h", "--help", action="help", help="Показать справку об этой команде и выйти")
+	send_group.add_argument("-h", "--help", action="help", help=_("help", "help_key_command_description"))
 
 	return parser.parse_args()
 

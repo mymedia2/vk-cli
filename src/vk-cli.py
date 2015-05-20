@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import argparse
-from locales import _
+import locales
 from dialogs import Dialogs
 from hub import Hub
 from messages import Messages

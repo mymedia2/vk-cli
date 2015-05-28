@@ -41,7 +41,7 @@ def app():
 	args = get_args()
 	Hub()	# инициализируем одиночку
 	if args.action == None:
-		Dialogs().call()
+		interactive()
 	elif args.action == "dialogs":
 		Dialogs().call(page=args.page)
 	elif args.action == "show":
@@ -56,3 +56,29 @@ def app():
 		elif not args.id and args.chat:
 			Sender().call(args.text, chat_id=args.chat)
 		else: raise ValueError
+
+def interactive():
+	# Главный цикл
+	while True:
+		dialogs = Dialogs()
+		dialogs.call()
+		cmd = Hub().console.read("Выберите No диалогa (q — выход, 0 — обновить): ")
+		if cmd == 'q': return
+		if cmd == '0': continue
+		diag = dialogs.last_list[int(cmd) - 1]
+		if 'chat_id' in diag.message:
+			Messages().call(chat_id=diag.message.chat_id)
+		else:
+			Messages().call(user_id=diag.message.user_id)
+		cmd = None
+		while cmd != 'q' and cmd != 'd' and cmd != 's' and cmd != '0':
+			cmd = Hub().console.read("Выберете действие (q — выход, d — назад, s — написать, 0 — обновить): ")
+		if cmd == 'q': return
+		if cmd == 'd': continue
+		if cmd == '0': raise NotImplementedError
+		if cmd == 's':
+			text = Hub().console.read("> ")
+			if 'chat_id' in diag.message:
+				Sender().call(text, chat_id=diag.message.chat_id)
+			else:
+				Sender().call(text, user_id=diag.message.user_id)

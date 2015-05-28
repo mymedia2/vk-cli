@@ -12,12 +12,12 @@ class Dialogs(FeatureInterface):
 
 	def get_data(self, page=0):
 		params = { "count": 10, "preview_length": 80, "offset": page * 10 }
-		self.dialogs = self.common.vkapi.messages.getDialogs(**params).items
-		for diag in self.dialogs:
+		self.last_list = self.common.vkapi.messages.getDialogs(**params).items
+		for diag in self.last_list:
 			if 'chat_id' not in diag.message:
 				self.common.users.add(diag.message.user_id)
 		self.common.users.fill_all("online")
-		return self.dialogs
+		return self.last_list
 
 	def render(self, dialogs):
 		#TODO: запихать dialogs в именнованный кортеж

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-from vkontakte import FieldDict
+
 import unittest
+from vk_cli.vkontakte import FieldDict
+
 class FieldDictTest(unittest.TestCase):
 	def test1(self):
 		fd = FieldDict.process_all({'a': 1, 'b': 2, 'c': "foo", 'd': "bar"})

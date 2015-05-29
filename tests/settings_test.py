@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-from settings import Settings
+
 import unittest, sys, os
+from vk_cli.settings import Settings
+
 class SettingsTest(unittest.TestCase):
 	file_name = sys.argv[0]+".conf"
 	def test1(self):

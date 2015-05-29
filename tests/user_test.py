@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-from user import User, UserPack
-from settings import Settings
-import unittest, vkontakte
+
+import unittest, os
+from vk_cli import vkontakte
+from vk_cli.user import User, UserPack
+from vk_cli.settings import Settings
+
 APP_ID = 4755710
 MY_ID = 147603034
 
@@ -39,7 +42,7 @@ class UserPackTestNetwork(unittest.TestCase):
 	durov = User(1)
 	me = User(MY_ID)
 	def setUpClass():
-		settings = Settings("vk-cli.conf")
+		settings = Settings(os.path.expanduser(os.path.join("~", ".vk-cli.conf")))
 		vkontakte.api(APP_ID, access_token=settings.access_token)
 	def test1_generic(self):
 		both = UserPack((self.durov, self.me))

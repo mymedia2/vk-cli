@@ -69,7 +69,7 @@ class UserPack(dict):
 
 		Выполняет запрос через интернет.
 		"""
-		vkapi = vkontakte.api()
+		vkapi = vk_cli.vkontakte.api()
 		ids = ",".join((str(u.id) for u in self))
 		response = vkapi.users.get(user_ids=ids, fields=fields)
 		self.clear()

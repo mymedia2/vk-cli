@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os, sys
+import vk_cli.locales
 import vk_cli.vkontakte
 from vk_cli.console import Console
 from vk_cli.settings import Settings
@@ -30,13 +31,15 @@ class Hub(object):
 		settings_file_name = "." + os.path.basename(sys.argv[0]) + ".conf"
 		self.settings = Settings(os.path.expanduser(os.path.join("~", settings_file_name)))
 
+		self.console = Console()
+
 		APP_ID = 4755710
 		if hasattr(self.settings, 'access_token'):
 			self.vkapi = vk_cli.vkontakte.api(APP_ID, access_token=self.settings.access_token)
 		else:
 			# TODO: реализовать запрос через Interact
-			login = input("Логин: ")
-			passw = input("Пароль: ")
+			login = self.console.read(_("login", "user_name") + ": ")
+			passw = self.console.read(_("login", "password") + ": ")
 			try: self.vkapi = vk_cli.vkontakte.api(APP_ID, login, passw, scope='messages')
 			# я обнаружил, что библиотека храинт пароль
 			finally: del passw, self.vkapi.user_password
@@ -44,5 +47,3 @@ class Hub(object):
 
 		self.current_user = User(0)
 		self.users = UserPack([self.current_user])
-
-		self.console = Console()

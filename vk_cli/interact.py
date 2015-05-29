@@ -1,4 +1,6 @@
-from hub import Hub
+#!/usr/bin/env python3
+
+from vk_cli.hub import Hub
 
 class Interact(object):
 

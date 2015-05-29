@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 class Console(object):
 	"""Взаимодействует с файлами ввода-вывода.

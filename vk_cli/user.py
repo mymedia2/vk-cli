@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import vkontakte
+
+import vk_cli.vkontakte
 
 class User(object):
 	"""Представляет пользователя ВКонтакте."""

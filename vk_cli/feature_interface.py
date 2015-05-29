@@ -1,5 +1,6 @@
-#!/usr/bin/python3
-from hub import Hub
+#!/usr/bin/env python3
+
+from vk_cli.hub import Hub
 
 class FeatureInterface(object):
 	"""Является интерфейсом для каждой из возможности программы"""

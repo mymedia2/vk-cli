@@ -14,7 +14,7 @@ def translate(category, string):
 	global _translation_file
 	if not _translation_file:
 		_translation_file = configparser.ConfigParser()
-		_translation_file.read(os.path.join(os.path.dirname(__file__), "ru.ini"))
+		_translation_file.read(os.path.join(os.path.dirname(__file__), "ru.ini.py"))
 	return _translation_file[category][string]
 
 builtins.__dict__["_"] = translate

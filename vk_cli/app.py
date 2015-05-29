@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+
 import argparse
-import locales
-from dialogs import Dialogs
-from hub import Hub
-from messages import Messages
-from sender import Sender
+import vk_cli.locales
+from vk_cli.dialogs import Dialogs
+from vk_cli.hub import Hub
+from vk_cli.messages import Messages
+from vk_cli.sender import Sender
 
 def get_args():
 	# TODO: запихнуть этого монстра в отдельный файл и в класс-обёртку
@@ -37,8 +38,8 @@ def get_args():
 	return parser.parse_args()
 
 def app():
-	Hub()	# инициализируем одиночку
 	args = get_args()
+	Hub()	# инициализируем одиночку
 	if args.action == None:
 		Dialogs().call()
 	elif args.action == "dialogs":
@@ -55,5 +56,3 @@ def app():
 		elif not args.id and args.chat:
 			Sender().call(args.text, chat_id=args.chat)
 		else: raise ValueError
-
-if __name__ == "__main__": app()

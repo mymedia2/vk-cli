@@ -1,4 +1,6 @@
-from feature_interface import FeatureInterface
+#!/usr/bin/env python3
+
+from vk_cli.feature_interface import FeatureInterface
 
 class Dialogs(FeatureInterface):
 	"""Отвечает за работу экрана со списком диалогов пользователя"""

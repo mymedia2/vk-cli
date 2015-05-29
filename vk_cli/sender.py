@@ -1,4 +1,6 @@
-from feature_interface import FeatureInterface
+#!/usr/bin/env python3
+
+from vk_cli.feature_interface import FeatureInterface
 
 class Sender(FeatureInterface):
 	def call(self, text_message, user_id=0, chat_id=0):

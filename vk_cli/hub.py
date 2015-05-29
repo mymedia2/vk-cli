@@ -1,10 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+
 import sys
-import vkontakte
-from console import Console
-from settings import Settings
-from singleton import singleton
-from user import User, UserPack
+import vk_cli.vkontakte
+from vk_cli.console import Console
+from vk_cli.settings import Settings
+from vk_cli.singleton import singleton
+from vk_cli.user import User, UserPack
 
 @singleton
 class Hub(object):

@@ -7,20 +7,7 @@ class api(vk.API):
 
 	Обёртка над сторонней библиотекой, делает FieldDict из всех словарей,
 	которые возвращает эта библиотека.
-
-	Реализует шаблон Одиночка, это значит, что в программе может быть только
-	один экземпляр этого класса.
 	"""
-
-	def __new__(cls, *args, **kwargs):
-		if not hasattr(cls, 'instance'):
-			cls.instance = super().__new__(cls)
-		return cls.instance
-
-	def __init__(self, *args, **kwargs):
-		if not hasattr(self.__class__, 'initialised'):
-			super().__init__(*args, **kwargs)
-			self.__class__.initialised = True
 
 	def __call__(self, *args, **kwargs):
 		return FieldDict.process_all(super().__call__(*args, **kwargs))

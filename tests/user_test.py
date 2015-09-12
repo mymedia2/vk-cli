@@ -35,9 +35,10 @@ class UserPackTest(unittest.TestCase):
 	def test2_addition(self):
 		users = UserPack()
 		users.add(1)
-		users.add([User(MY_ID)])
+		users.add(User(MY_ID))
 		self.assertEqual(users, UserPack([User(1), MY_ID]))
 
+@unittest.skip("Необходимо переписать с учётом появления хаба. Не следует неявно использовать другие модули")
 class UserPackTestNetwork(unittest.TestCase):
 	durov = User(1)
 	me = User(MY_ID)

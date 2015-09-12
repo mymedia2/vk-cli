@@ -2,7 +2,7 @@
 
 import os, sys
 import vk_cli.locales
-import vk_cli.vkontakte
+import vk_cli.vkontakte as vkontakte
 from vk_cli.console import Console
 from vk_cli.settings import Settings
 from vk_cli.singleton import singleton
@@ -15,7 +15,7 @@ class Hub(object):
 	#: API ВКонтакте, осуществляет работу с сетью, экземпляр vkontakte.api
 	vkapi = None
 
-	#: Настройки всей программы, осущесвляет запись в файл, экземпляр Settings
+	#: Настройки всей программы, осуществляет запись в файл, экземпляр Settings
 	settings = None
 
 	#: Объект User текущего пользователя
@@ -35,15 +35,15 @@ class Hub(object):
 
 		APP_ID = 4755710
 		if hasattr(self.settings, 'access_token'):
-			self.vkapi = vk_cli.vkontakte.api(APP_ID, access_token=self.settings.access_token)
+			self.vkapi = vkontakte.api(APP_ID, access_token=self.settings.access_token)
 		else:
 			# TODO: реализовать запрос через Interact
 			login = self.console.read(_("login", "user_name") + ": ")
 			passw = self.console.read(_("login", "password") + ": ")
-			try: self.vkapi = vk_cli.vkontakte.api(APP_ID, login, passw, scope='messages')
+			try: self.vkapi = vkontakte.api(APP_ID, login, passw, scope='messages')
 			# я обнаружил, что библиотека храинт пароль
 			finally: del passw, self.vkapi.user_password
 			self.settings.access_token = self.vkapi.access_token
 
 		self.current_user = User(0)
-		self.users = UserPack([self.current_user])
+		self.users = UserPack(self.current_user)

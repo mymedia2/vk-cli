@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import vk_cli.vkontakte
-
 class User(object):
 	"""Представляет пользователя ВКонтакте."""
 
@@ -13,9 +11,6 @@ class User(object):
 
 	def __eq__(self, other):
 		return self.id == other.id
-
-	def __ne__(self, other):
-		return not(self == other)
 
 	def header(self):
 		"""Возвращает имя и фамилию пользователя.
@@ -69,7 +64,11 @@ class UserPack(dict):
 
 		Выполняет запрос через интернет.
 		"""
-		vkapi = vk_cli.vkontakte.api()
+		# TODO: подмать, как импортировать хаб в начале файла
+		# и избежать циклического импорта
+		import vk_cli.hub
+		vkapi = vk_cli.hub.Hub().vkapi
+
 		ids = ",".join((str(u.id) for u in self))
 		response = vkapi.users.get(user_ids=ids, fields=fields)
 		self.clear()

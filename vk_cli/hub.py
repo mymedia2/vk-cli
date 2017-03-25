@@ -35,12 +35,12 @@ class Hub(object):
 
 		APP_ID = 4755710
 		if hasattr(self.settings, 'access_token'):
-			self.vkapi = vkontakte.api(APP_ID, access_token=self.settings.access_token)
+			self.vkapi = vkontakte.api(APP_ID, access_token=self.settings.access_token, timeout=30)
 		else:
 			# TODO: реализовать запрос через Interact
 			login = self.console.read(_("login", "user_name") + ": ")
 			passw = self.console.read(_("login", "password") + ": ")
-			try: self.vkapi = vkontakte.api(APP_ID, login, passw, scope='messages')
+			try: self.vkapi = vkontakte.api(APP_ID, login, passw, scope='messages', timeout=30)
 			# я обнаружил, что библиотека храинт пароль
 			finally: del passw, self.vkapi.user_password
 			self.settings.access_token = self.vkapi.access_token

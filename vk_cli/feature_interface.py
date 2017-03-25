@@ -10,7 +10,7 @@ class FeatureInterface(object):
 
 	def __init__(self):
 		self.common = Hub()
-	
+
 	def get_data(self, *args, **kwargs):
 		"""Возвращает словарь с данными, которые можно отрисовывать на консоли.
 
@@ -19,11 +19,11 @@ class FeatureInterface(object):
 		переопределить свои.
 		"""
 		raise NotImplementedError
-	
+
 	def render(self, data):
 		"""Отрисовывает словарь data в self.common.console"""
 		raise NotImplementedError
-	
+
 	def call(self, *args, **kwargs):
 		"""Обеспечивает лёкгий вызов возможности"""
 		return self.render(self.get_data(*args, **kwargs))

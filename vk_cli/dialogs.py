@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from vk_cli.feature_interface import FeatureInterface
+from os import get_terminal_size
 
 class Dialogs(FeatureInterface):
 	"""Отвечает за работу экрана со списком диалогов пользователя"""
@@ -21,12 +22,20 @@ class Dialogs(FeatureInterface):
 
 	def render(self, dialogs):
 		#TODO: запихать dialogs в именнованный кортеж
-		for i, diag in enumerate(dialogs, start=1):
+		i = len(dialogs)
+		column_width = get_terminal_size().columns - 10 # 10 == " "*5
+		for diag in reversed(dialogs):
 			unread = diag.unread if 'unread' in diag else 0
-			if unread >= 1000: unread = "..."
-			if 'chat_id' in diag.message: title = diag.message.title
-			else: title = self.common.users[diag.message.user_id].header()
+			if unread >= 100: unread = "..."
+			if 'chat_id' in diag.message:
+				title = diag.message.title
+				id_ = diag.message.chat_id
+			else:
+				title = self.common.users[diag.message.user_id].header()
+				id_ = diag.message.user_id
 
 			out = self.common.console.write
-			out("{0:>3}".format(i), "{0:>3}".format(unread), "{0:<85}".format(title))
-			out(" "*13, "{0:<80}".format(diag.message.body))
+			out("{0:>2}".format(i), "{0:^10}".format(id_),
+				"{0:>2}".format(unread), "{0:<{1}}".format(title, column_width - 14))
+			out(" "*16, "{0:<{1}}".format(diag.message.body, column_width - 32))
+			i -= 1

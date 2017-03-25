@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from vk_cli.feature_interface import FeatureInterface
+from os import get_terminal_size
 
 class Messages(FeatureInterface):
 	"""Отвечает за работу экрана с сообщениями из конкретного диалога"""
@@ -19,6 +20,8 @@ class Messages(FeatureInterface):
 
 	def render(self, messages):
 		last_msg_author = None
+		msg_readed = ''
+		column_width = get_terminal_size().columns
 		for msg in messages[::-1]:
 			# печаем имя пользователя, если мы в беседе и это входящее сообщение
 			# дважды подряд имя пользователя не печатаем
@@ -28,4 +31,12 @@ class Messages(FeatureInterface):
 
 			align = '>' if msg.out else '<'
 			for line in msg.body.split('\n'):
-				self.common.console.write(" "*13, "{0:{1}80}".format(line, align))
+				self.common.console.write(" "*5, "{0:{1}{2}}".format(line, align, column_width - 10))
+
+			# запоминаем ID's сообщ. которые входящие и не прочитаные
+			if not msg.out and not msg.read_state:
+				msg_readed += str(msg.id) + ','
+
+		if msg_readed:
+			msg_readed = msg_readed[:-1]
+			self.common.vkapi.messages.markAsRead(message_ids = msg_readed)

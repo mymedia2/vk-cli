@@ -24,15 +24,15 @@ def get_args():
 	show_parser = subparsers.add_parser("show", help=_("help", "show_title"), add_help=False)
 	show_group = show_parser.add_argument_group(title=_("help", "parametrs_title"))
 	show_group.add_argument("-p", "--page", type=int, default=0, help=_("help", "page_key_description"), metavar="INT")
-	show_group.add_argument("--id", type=int, metavar="USER_ID")
-	show_group.add_argument("--chat", type=int, metavar="CHAT_ID")
+	show_group.add_argument("-i", "--id", type=int, metavar="USER_ID")
+	show_group.add_argument("-c", "--chat", type=int, metavar="CHAT_ID")
 	show_group.add_argument("-h", "--help", action="help", help=_("help", "help_key_command_description"))
 
 	send_parser = subparsers.add_parser("send", help=_("help", "send_title"), add_help=False)
 	send_group = send_parser.add_argument_group(title=_("help", "parametrs_title"))
 	send_group.add_argument("text", type=str, help=_("help", "text_key_desciption"))
-	send_group.add_argument("--id", type=int, metavar="USER_ID")
-	send_group.add_argument("--chat", type=int, metavar="CHAT_ID")
+	send_group.add_argument("-i", "--id", type=int, metavar="USER_ID")
+	send_group.add_argument("-c", "--chat", type=int, metavar="CHAT_ID")
 	send_group.add_argument("-h", "--help", action="help", help=_("help", "help_key_command_description"))
 
 	return parser.parse_args()
@@ -41,6 +41,7 @@ def app():
 	args = get_args()
 	Hub()	# инициализируем одиночку
 	if args.action == None:
+		# Dialogs().call()
 		interactive()
 	elif args.action == "dialogs":
 		Dialogs().call(page=args.page)
@@ -53,8 +54,10 @@ def app():
 	elif args.action == "send":
 		if args.id and not args.chat:
 			Sender().call(args.text, user_id=args.id)
+			Messages().call(user_id=args.id)
 		elif not args.id and args.chat:
 			Sender().call(args.text, chat_id=args.chat)
+			Messages().call(chat_id=args.chat)
 		else: raise ValueError
 
 def interactive():
@@ -71,14 +74,21 @@ def interactive():
 		else:
 			Messages().call(user_id=diag.message.user_id)
 		cmd = None
-		while cmd != 'q' and cmd != 'd' and cmd != 's' and cmd != '0':
+
+		# Цикл в выбранном сообщении
+		while True:
 			cmd = Hub().console.read("Выберете действие (q — выход, d — назад, s — написать, 0 — обновить): ")
-		if cmd == 'q': return
-		if cmd == 'd': continue
-		if cmd == '0': raise NotImplementedError
-		if cmd == 's':
-			text = Hub().console.read("> ")
+			if cmd == 'q': return
+			if cmd == 'd': break
+			if cmd == 's':
+				text = Hub().console.read("> ")
+				if 'chat_id' in diag.message:
+					Sender().call(text, chat_id=diag.message.chat_id)
+				else:
+					Sender().call(text, user_id=diag.message.user_id)
+
+			# перерисовываем выбранный диалог
 			if 'chat_id' in diag.message:
-				Sender().call(text, chat_id=diag.message.chat_id)
+				Messages().call(chat_id=diag.message.chat_id)
 			else:
-				Sender().call(text, user_id=diag.message.user_id)
+				Messages().call(user_id=diag.message.user_id)

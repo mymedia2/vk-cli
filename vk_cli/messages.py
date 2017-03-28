@@ -20,7 +20,7 @@ class Messages(FeatureInterface):
 
 	def render(self, messages):
 		last_msg_author = None
-		msg_readed = ''
+		msg_readed = list()
 		column_width = get_terminal_size().columns
 		for msg in messages[::-1]:
 			# печаем имя пользователя, если мы в беседе и это входящее сообщение
@@ -35,8 +35,7 @@ class Messages(FeatureInterface):
 
 			# запоминаем ID's сообщ. которые входящие и не прочитаные
 			if not msg.out and not msg.read_state:
-				msg_readed += str(msg.id) + ','
+				msg_readed.append(str(msg.id))
 
 		if msg_readed:
-			msg_readed = msg_readed[:-1]
-			self.common.vkapi.messages.markAsRead(message_ids = msg_readed)
+			self.common.vkapi.messages.markAsRead(message_ids=','.join(msg_readed))

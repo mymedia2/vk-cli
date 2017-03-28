@@ -22,9 +22,8 @@ class Dialogs(FeatureInterface):
 
 	def render(self, dialogs):
 		#TODO: запихать dialogs в именнованный кортеж
-		i = len(dialogs)
 		column_width = get_terminal_size().columns - 10 # 10 == " "*5
-		for diag in reversed(dialogs):
+		for i, diag in reversed(list(enumerate(dialogs, start=1))):
 			unread = diag.unread if 'unread' in diag else 0
 			if unread >= 100: unread = "..."
 			if 'chat_id' in diag.message:
@@ -38,4 +37,3 @@ class Dialogs(FeatureInterface):
 			out("{0:>2}".format(i), "{0:^10}".format(id_),
 				"{0:>2}".format(unread), "{0:<{1}}".format(title, column_width - 14))
 			out(" "*16, "{0:<{1}}".format(diag.message.body, column_width - 32))
-			i -= 1
